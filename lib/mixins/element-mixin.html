@@ -420,7 +420,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       if (window.ShadyCSS) {
         window.ShadyCSS.prepareTemplate(template, is, ext);
       }
-      proto._bindTemplate(template, propertiesForClass(proto.constructor));
+      proto._bindTemplate(template);
     }
 
     function flushPropertiesStub() {}
@@ -616,7 +616,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        */
       ready() {
         if (this._template) {
-          this.root = this._stampTemplate(this._template);
+          this.root = this._stampBoundTemplate(this._template);
         }
         super.ready();
       }
@@ -738,6 +738,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           base = Polymer.ResolveUrl.resolveUrl(this.importPath);
         }
         return Polymer.ResolveUrl.resolveUrl(url, base);
+      }
+
+      static _parseTemplateContent(template, templateInfo, nodeInfo) {
+        templateInfo.dynamicFns = templateInfo.dynamicFns || propertiesForClass(this);
+        return super._parseTemplateContent(template, templateInfo, nodeInfo);
       }
 
     }
